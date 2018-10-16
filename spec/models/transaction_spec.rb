@@ -1,22 +1,25 @@
 require 'rails_helper'
 
-describe transaction do
+RSpec.describe Transaction, type: :model do
+  context 'transaction validation' do
+    it 'should valid transaction' do
+      FactoryGirl.build(:transaction).should be_valid
+    end
 
-  context 'validations' do
-    it { should validate_presence_of :date }
-    it { should validate_presence_of :operation}
-    it { should validate_confirmation_of :operation}
-    it { should validate_presence_of :amount } 
-    it { should validate_confirmation_of :amount }
-  end
-   context 'associations' do
-    it { belongs_to(:atm) } 
-    it { belongs_to(:account) } 
-  end
-  context '#issue_to_transaction' do
-     it 'not permitted invalid amount less then zero' do
-    expect 'amount <=0.00'
-  end
-     it 'permitted valid salary less than equal to zero' do
-    expect 'salary <=0'
-  end
+    it 'should invalid without amount' do
+    	FactoryGirl.build(:transaction, amount: nil).should_not be_valid
+    end 
+
+    it 'should invalid without valid_amount' do
+    	FactoryGirl.build(:transaction, valid_amount: 0.00).should_not be_valid
+    end 
+
+    it 'should invalid without date' do
+    	FactoryGirl.build(:transaction, date: nil).should_not be_valid
+    end 
+ 
+    it 'should invalid without operation' do
+      FactoryGirl.build(:transaction, operation: nil).should_not be_valid
+    end
+
+  
